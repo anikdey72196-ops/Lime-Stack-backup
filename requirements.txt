@@ -1,0 +1,9 @@
+Flask
+Flask-WTF
+WTForms
+Flask-SQLAlchemy
+Flask-Bcrypt
+email_validator
+requests
+Pillow
+python-dotenv
