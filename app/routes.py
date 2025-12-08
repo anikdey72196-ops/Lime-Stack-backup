@@ -1,10 +1,9 @@
-from app.forms import LoginForm, RegistrationForm, PostForm
-from app.models import User, Post
-from flask import render_template, url_for, redirect, flash
-from app import app
-from app import db
-from app import bcrypt
-from flask_login import login_user, current_user, logout_user, login_required
+from flask import flash, redirect, render_template, url_for
+from flask_login import current_user, login_required, login_user, logout_user
+
+from app import app, bcrypt, db
+from app.forms import LoginForm, PostForm, RegistrationForm
+from app.models import Post, User
 
 #login_user is a function to log the user in
 
@@ -46,7 +45,7 @@ def registration():
                     password=hashed_password)
         db.session.add(user)
         db.session.commit()
-        flash(f"Your account has been created !", 'success')
+        flash("Your account has been created !", 'success')
         return redirect(url_for('SignIn'))
     print(forms.errors)
     return render_template("registration.html", title='Register', form=forms)
