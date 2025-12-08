@@ -1,22 +1,22 @@
-
 from app.forms import LoginForm, RegistrationForm, PostForm
-from app.models import User,Post
-from flask import render_template, url_for,redirect,flash
+from app.models import User, Post
+from flask import render_template, url_for, redirect, flash
 from app import app
 from app import db
 from app import bcrypt
-from flask_login import login_user, current_user, logout_user , login_required 
+from flask_login import login_user, current_user, logout_user, login_required
 
 #login_user is a function to log the user in
+
 
 @app.route("/")
 def home_page():
     return render_template("index.html")
 
+
 @app.route("/home")
 def home():
     return render_template("home.html")
-
 
 
 @app.route("/SignIn", methods=['GET', 'POST'])
@@ -24,10 +24,11 @@ def SignIn():
     form = LoginForm()
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first()
-        if user and bcrypt.check_password_hash(user.password, form.password.data):
-            login_user(user) # it is a true false based data
+        if user and bcrypt.check_password_hash(user.password,
+                                               form.password.data):
+            login_user(user)  # it is a true false based data
             return redirect(url_for('archive'))
-        flash('Login Unsuccessful, Please check email and password')       
+        flash('Login Unsuccessful, Please check email and password')
     print(form.errors)
     return render_template("SignIn.html", title='Login', form=form)
 
@@ -40,7 +41,9 @@ def registration():
     if forms.validate_on_submit():
         hashed_password = bcrypt.generate_password_hash(forms.password.data)
         #database entry
-        user = User(username=forms.username.data, email=forms.email.data, password=hashed_password)
+        user = User(username=forms.username.data,
+                    email=forms.email.data,
+                    password=hashed_password)
         db.session.add(user)
         db.session.commit()
         flash(f"Your account has been created !", 'success')
@@ -51,8 +54,9 @@ def registration():
 
 @app.route("/archive", methods=['GET', 'POST'])
 def archive():
-    posts = Post.query.all()   
+    posts = Post.query.all()
     return render_template("archive.html", posts=posts)
+
 
 @app.route("/logout")
 def logout():
@@ -61,20 +65,19 @@ def logout():
 
 
 @app.route("/post/new", methods=['GET', 'POST'])
-@login_required                     #Use login_required as a decorator not a function
-def new_post():    
+@login_required  #Use login_required as a decorator not a function
+def new_post():
     form = PostForm()
     if form.validate_on_submit():
-        post = Post(title = form.title.data, content = form.content.data, author=current_user)  #author is backref connected to Post class
+        post = Post(
+            title=form.title.data,
+            content=form.content.data,
+            author=current_user)  #author is backref connected to Post class
         db.session.add(post)
         db.session.commit()
         print(form.errors)
         flash("You post has been submited")
         return redirect(url_for('archive'))
-    return render_template('createPost.html', title='Create New Post', form = form)
-
-
-
-
-
-
+    return render_template('createPost.html',
+                           title='Create New Post',
+                           form=form)

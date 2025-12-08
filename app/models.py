@@ -34,11 +34,13 @@ class User(db.Model, UserMixin):   #creating class User for the db.model inherit
     email = db.Column(db.String(20), unique=True,nullable=False)
     image_file = db.Column(db.String(20),nullable=False,default='default.jpg')
     password = db.Column(db.String(60),nullable=False)
-    posts = db.relationship('Post', backref='author',lazy=True) # first entry in the class you want to build the relatiobship with
+    posts = db.relationship('Post', backref='author',lazy=True) 
+    # first entry in the class you want to build the relatiobship with
 
 
     def __repr__(self):
-        return f"User({self.username},{self.email},{self.image_file})"  #User just used as a string nothing special here ## don't forget the classic rules
+        return f"User({self.username},{self.email},{self.image_file})"  
+    #User just used as a string nothing special here ## don't forget the classic rules
 
 
 
@@ -47,7 +49,10 @@ class Post(db.Model):  # Gonna contain all the user written posts
     title = db.Column(db.String(100),nullable=False)
     date_posted = db.Column(db.DateTime, nullable=False,default=datetime.now)
     content = db.Column(db.Text, nullable=False)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'),  nullable=False)  # in user.id, user's u is smaller case cause we ain't calling the whole User class, the table name which by defaults to smaller case of the class name, here it will be just 'user'
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'),  nullable=False)  
+    # in user.id, user's u is smaller case cause we ain't calling the whole User class
+    # the table name which by defaults to smaller case of the class name, here it will 
+    #be just 'user'
 
     def __repr__(self):   #here inheritance won't work cause defined functions only supports instance
         return f"Posts({self.title},{self.date_posted})"
