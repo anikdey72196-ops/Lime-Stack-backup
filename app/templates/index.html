@@ -48,7 +48,7 @@
                     <a href="{{url_for('home')}}" class="nav_links {% if request.endpoint == 'home' %}active-green{% endif %}">HOME</a>
                 </li>
                 <li id="nav_contents">
-                    <a href="{{url_for('archive')}}" class="nav_links {% if request.endpoint == 'archive' %}active-green{% endif %}">ARCHIVE</a>
+                    <a href="{{url_for('archive')}}" class="nav_links {% if request.endpoint == 'archive' %}active-green{% endif %}">GENERATE</a>
                 </li>
                 <li id="nav_contents">
                     {% if current_user.is_authenticated %}
