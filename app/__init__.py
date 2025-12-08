@@ -1,32 +1,19 @@
-import os
+# This file is names __init__.py because that's how flask recognises, this is a package
 from flask import Flask
-from flask_login import LoginManager
-from app.models import db, bcrypt, User
+from flask_sqlalchemy import SQLAlchemy
+from flask_bcrypt import Bcrypt # for hashing passwords
+from flask_login import LoginManager #to manage Sign In services
 
 
-login_manager = LoginManager()
-login_manager.login_view = 'main.SignIn'
+
+app = Flask(__name__, template_folder='templates')
+app.config['SECRET_KEY'] = '1fec41ec87124ae865fad317fbff8871'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
+db = SQLAlchemy(app)
+
+bcrypt = Bcrypt(app)
+
+login_manager = LoginManager(app) #passing app in the loging manager
 
 
-@login_manager.user_loader
-def load_user(user_id):
-    return User.query.get(int(user_id))
-
-
-def create_app():
-    app = Flask(__name__)
-    app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'dev-secret-key')
-    app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'sqlite:///app.db')
-    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-    
-    db.init_app(app)
-    bcrypt.init_app(app)
-    login_manager.init_app(app)
-    
-    from app.routes import main
-    app.register_blueprint(main)
-    
-    with app.app_context():
-        db.create_all()
-    
-    return app
+from app import routes  #because in the routes file the route will work after this line

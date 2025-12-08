@@ -1,65 +1,80 @@
-from flask import Blueprint, render_template, redirect, url_for, flash
-from flask_login import login_user, logout_user, login_required, current_user
-from app.models import db, User
-from app.forms import SignInForm, SignUpForm
 
-main = Blueprint('main', __name__)
+from app.forms import LoginForm, RegistrationForm, PostForm
+from app.models import User,Post
+from flask import render_template, url_for,redirect,flash
+from app import app
+from app import db
+from app import bcrypt
+from flask_login import login_user, current_user, logout_user , login_required 
 
+#login_user is a function to log the user in
 
-@main.route('/')
-def index():
-    return redirect(url_for('main.home'))
+@app.route("/")
+def home_page():
+    return render_template("index.html")
 
-
-@main.route('/home')
+@app.route("/home")
 def home():
-    return render_template('home.html')
+    return render_template("home.html")
 
 
-@main.route('/archive')
-@login_required
-def archive():
-    return render_template('archive.html')
 
-
-@main.route('/signin', methods=['GET', 'POST'])
+@app.route("/SignIn", methods=['GET', 'POST'])
 def SignIn():
-    if current_user.is_authenticated:
-        return redirect(url_for('main.home'))
-    
-    form = SignInForm()
+    form = LoginForm()
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first()
-        if user and user.check_password(form.password.data):
-            login_user(user)
-            flash('Signed in successfully!', 'success')
-            return redirect(url_for('main.home'))
-        else:
-            flash('Invalid email or password.', 'danger')
-    
-    return render_template('signin.html', form=form)
+        if user and bcrypt.check_password_hash(user.password, form.password.data):
+            login_user(user) # it is a true false based data
+            return redirect(url_for('archive'))
+        flash('Login Unsuccessful, Please check email and password')       
+    print(form.errors)
+    return render_template("SignIn.html", title='Login', form=form)
 
 
-@main.route('/signup', methods=['GET', 'POST'])
-def SignUp():
+@app.route("/registration", methods=['GET', 'POST'])
+def registration():
     if current_user.is_authenticated:
-        return redirect(url_for('main.home'))
-    
-    form = SignUpForm()
-    if form.validate_on_submit():
-        user = User(username=form.username.data, email=form.email.data)
-        user.set_password(form.password.data)
+        return redirect(url_for('archive'))
+    forms = RegistrationForm()
+    if forms.validate_on_submit():
+        hashed_password = bcrypt.generate_password_hash(forms.password.data)
+        #database entry
+        user = User(username=forms.username.data, email=forms.email.data, password=hashed_password)
         db.session.add(user)
         db.session.commit()
-        flash('Account created! Please sign in.', 'success')
-        return redirect(url_for('main.SignIn'))
-    
-    return render_template('signup.html', form=form)
+        flash(f"Your account has been created !", 'success')
+        return redirect(url_for('SignIn'))
+    print(forms.errors)
+    return render_template("registration.html", title='Register', form=forms)
 
 
-@main.route('/logout')
-@login_required
+@app.route("/archive", methods=['GET', 'POST'])
+def archive():
+    posts = Post.query.all()   
+    return render_template("archive.html", posts=posts)
+
+@app.route("/logout")
 def logout():
     logout_user()
-    flash('You have been signed out.', 'info')
-    return redirect(url_for('main.home'))
+    return redirect(url_for('home'))
+
+
+@app.route("/post/new", methods=['GET', 'POST'])
+@login_required                     #Use login_required as a decorator not a function
+def new_post():    
+    form = PostForm()
+    if form.validate_on_submit():
+        post = Post(title = form.title.data, content = form.content.data, author=current_user)  #author is backref connected to Post class
+        db.session.add(post)
+        db.session.commit()
+        print(form.errors)
+        flash("You post has been submited")
+        return redirect(url_for('archive'))
+    return render_template('createPost.html', title='Create New Post', form = form)
+
+
+
+
+
+

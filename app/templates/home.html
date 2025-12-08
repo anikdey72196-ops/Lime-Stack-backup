@@ -18,9 +18,9 @@
 
                 
                     {% if current_user.is_authenticated %}
-                        <a href="{{url_for('main.archive')}}"><input type="submit" id="button" value="[START WRITING]"></a>
+                        <a href="{{url_for('archive')}}"><input type="submit" id="button" value="[START WRITING]"></a>
                         {% else %}
-                            <a href="{{url_for('main.SignIn')}}"><input type="submit" id="button" value="[START WRITING]"></a>                       
+                            <a href="{{url_for('SignIn')}}"><input type="submit" id="button" value="[START WRITING]"></a>                       
                     {% endif %}
 
                 
