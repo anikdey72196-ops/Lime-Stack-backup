@@ -1,0 +1,66 @@
+:root{
+            color-scheme: light;
+            background-color: #cdd4c7;
+
+            
+}
+
+*{
+    font-family: "IBM Plex Mono", monospace;
+
+}
+
+body{
+    
+    width: 100vw;
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: "IBM Plex Mono", monospace;
+}
+
+/* Create a reusable wrapper class */
+.content-wrapper {
+    max-width: 100%; /* Stop it from getting too wide on huge screens */
+    width: 99.5%;        /* Take up 90% of the screen on smaller devices */
+    margin: 0 auto;    /* MAGIC: This centers the block horizontally */
+    padding: 0 15px;   /* Add a little breathing room on mobile edges */
+}
+
+
+
+
+body{
+    background-color: #cdd4c7;
+    background-image:
+        repeating-linear-gradient(
+            to right,
+            #e0e0e0e0,
+            #e0e0e0e0 2px,
+            transparent 1px,
+            transparent 20px),
+
+        repeating-linear-gradient(
+            to bottom,
+            #e0e0e0e0,
+            #e0e0e0e0 2px,
+            transparent 1px,
+            transparent 20px
+            );
+    
+    background-size: 20px 20px;
+    
+    
+
+}
+
+#minicircle{
+    transition: all 0.04s ease;
+    width: 10px;
+    height: 10px;
+    position:absolute;
+    z-index: 99999;
+    border-radius: 50%;
+    background-color: rgb(0, 0, 0);
+    
+}

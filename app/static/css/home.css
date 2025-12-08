@@ -1,0 +1,61 @@
+body #home_page{
+    width: 98vw;
+    height: 85vh;
+    /*margin-left: 6px;
+    margin-right: 22px;*/
+
+    padding: 15px 15px 15px;
+    background-color: snow;
+    border: var(--main-border);
+    
+
+
+}
+
+#home_page_text{
+    width: fit-content;
+    /*background-color: red;*/
+    position: absolute;
+    top: 35%;
+    padding-left: 100px;
+}
+
+.heading_middle{
+    line-height: 1;
+}
+.heading_middle .sub_text{
+    padding-left: 80px;
+
+}
+.heading_middle .main_text{
+    padding-left: 100px;
+}
+
+
+.full-box{
+    width: 10px;
+    height: 10px;
+    background-color: #333333;
+}
+
+#home_page_text input{
+    transform: translate(-2px, -2px); /* Moves button up and left slightly */
+    background-color: #7CFC00; /* Lime green background */
+    color: black; /* Keep text black */
+    font-size: 1.5rem;
+    
+    /* The magic hard shadow */
+    box-shadow: 3px 4px 0 black; /* Larger, offset black shadow */
+    z-index: 2; /* Bring to front on hover */
+    position: absolute;
+    left: 90%;
+}
+
+
+#home_page_text input:active {
+    font-size: 1.4rem;
+    background-color: var(--green-color);
+    border-color: black;
+    color: black;
+    box-shadow: 1px 2px 0 black;
+} 
