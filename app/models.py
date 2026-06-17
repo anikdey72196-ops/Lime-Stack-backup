@@ -1,17 +1,6 @@
 from datetime import datetime
 
-from flask_login import UserMixin
-
-from app import db, login_manager
-
-#UserMixin contains all the methods and the attributes
-# we need to set the work with the user_loader extension
-
-
-# login session manager
-@login_manager.user_loader  # setting up the user_loader extension to load the user
-def load_user(user_id):  #using user_id to load the user
-    return User.query.get(int(user_id))
+from app import db
 
 
 #To reloading the session of the logged in user, we need to create a decorator function
@@ -25,7 +14,7 @@ def __init__(self, **kwargs):
 
 
 # This contains all the personal info of the user
-class User(db.Model, UserMixin):
+class User(db.Model):
     #creating class User for the db.model inheritance
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(20), unique=True, nullable=False)

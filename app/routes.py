@@ -1,82 +1,119 @@
-from flask import flash, redirect, render_template, url_for
-from flask_login import current_user, login_required, login_user, logout_user
+import os
+from flask import request, jsonify, send_from_directory
+from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
+from marshmallow import ValidationError
 
 from app import app, bcrypt, db
-from app.forms import LoginForm, PostForm, RegistrationForm
 from app.models import Post, User
+from app.schemas import UserSchema, LoginSchema, PostSchema
 
-#login_user is a function to log the user in
+user_schema = UserSchema()
+login_schema = LoginSchema()
+post_schema = PostSchema()
+posts_schema = PostSchema(many=True)
 
+FRONTEND_FOLDER = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'frontend')
 
 @app.route("/")
-def home_page():
-    return render_template("index.html")
+def index():
+    return send_from_directory(FRONTEND_FOLDER, 'index.html')
 
-
-@app.route("/home")
-def home():
-    return render_template("home.html")
-
-
-@app.route("/SignIn", methods=['GET', 'POST'])
-def SignIn():
-    form = LoginForm()
-    if form.validate_on_submit():
-        user = User.query.filter_by(email=form.email.data).first()
-        if user and bcrypt.check_password_hash(user.password,
-                                               form.password.data):
-            login_user(user)  # it is a true false based data
-            return redirect(url_for('archive'))
-        flash('Login Unsuccessful, Please check email and password')
-    print(form.errors)
-    return render_template("SignIn.html", title='Login', form=form)
-
-
-@app.route("/registration", methods=['GET', 'POST'])
+@app.route("/registration", methods=['POST'])
 def registration():
-    if current_user.is_authenticated:
-        return redirect(url_for('archive'))
-    forms = RegistrationForm()
-    if forms.validate_on_submit():
-        hashed_password = bcrypt.generate_password_hash(forms.password.data)
-        #database entry
-        user = User(username=forms.username.data,
-                    email=forms.email.data,
-                    password=hashed_password)
-        db.session.add(user)
-        db.session.commit()
-        flash("Your account has been created !", 'success')
-        return redirect(url_for('SignIn'))
-    print(forms.errors)
-    return render_template("registration.html", title='Register', form=forms)
+    try:
+        data = user_schema.load(request.get_json() or {})
+    except ValidationError as err:
+        return jsonify(err.messages), 400
 
+    if User.query.filter_by(email=data['email']).first():
+        return jsonify({"message": "Email already exists"}), 400
+    if User.query.filter_by(username=data['username']).first():
+        return jsonify({"message": "This username already exists"}), 400
 
-@app.route("/archive", methods=['GET', 'POST'])
+    hashed_password = bcrypt.generate_password_hash(data['password']).decode('utf-8')
+    user = User(username=data['username'],
+                email=data['email'],
+                password=hashed_password)
+    db.session.add(user)
+    db.session.commit()
+    return jsonify({"message": "User created successfully", "user": user_schema.dump(user)}), 201
+
+@app.route("/SignIn", methods=['POST'])
+def SignIn():
+    try:
+        data = login_schema.load(request.get_json() or {})
+    except ValidationError as err:
+        return jsonify(err.messages), 400
+
+    user = User.query.filter_by(email=data['email']).first()
+    if user and bcrypt.check_password_hash(user.password, data['password']):
+        access_token = create_access_token(identity=str(user.id))
+        return jsonify({"access_token": access_token}), 200
+
+    return jsonify({"message": "Invalid email or password"}), 401
+
+@app.route("/archive", methods=['GET'])
 def archive():
     posts = Post.query.all()
-    return render_template("archive.html", posts=posts)
+    return jsonify({"posts": posts_schema.dump(posts)}), 200
 
-
-@app.route("/logout")
-def logout():
-    logout_user()
-    return redirect(url_for('home'))
-
-
-@app.route("/post/new", methods=['GET', 'POST'])
-@login_required  #Use login_required as a decorator not a function
+@app.route("/post/new", methods=['POST'])
+@jwt_required()
 def new_post():
-    form = PostForm()
-    if form.validate_on_submit():
-        post = Post(
-            title=form.title.data,
-            content=form.content.data,
-            author=current_user)  #author is backref connected to Post class
-        db.session.add(post)
-        db.session.commit()
-        print(form.errors)
-        flash("You post has been submited")
-        return redirect(url_for('archive'))
-    return render_template('createPost.html',
-                           title='Create New Post',
-                           form=form)
+    try:
+        data = post_schema.load(request.get_json() or {})
+    except ValidationError as err:
+        return jsonify(err.messages), 400
+
+    current_user_id = get_jwt_identity()
+    user = User.query.get(int(current_user_id))
+    
+    post = Post(
+        title=data['title'],
+        content=data['content'],
+        author=user)
+    db.session.add(post)
+    db.session.commit()
+    
+    return jsonify({"message": "Post created successfully", "post": post_schema.dump(post)}), 201
+
+@app.route("/post/<int:post_id>", methods=['DELETE'])
+@jwt_required()
+def delete_post(post_id):
+    post = Post.query.get_or_404(post_id)
+    current_user_id = get_jwt_identity()
+    
+    # Optional: check if the user is the author of the post
+    if str(post.user_id) != str(current_user_id):
+        return jsonify({"message": "You are not authorized to delete this post"
+        "Only author can delete the post"}), 403
+
+    db.session.delete(post)
+    db.session.commit()
+    return jsonify({"message": "Post deleted successfully"}), 200
+
+@app.route("/post/<int:post_id>", methods=['PUT'])
+@jwt_required()
+def Edit_post(post_id):
+    post = Post.query.get_or_404(post_id)
+    current_user_id = get_jwt_identity()
+
+    if str(post.user_id) != str(current_user_id):
+        return jsonify({"message": "You are not authorized to edit this post. Only the author can edit it."}), 403
+    
+    try:
+        data = post_schema.load(request.get_json() or {})
+    except ValidationError as err:
+        return jsonify(err.messages), 400
+        
+    # Update existing post fields
+    post.title = data['title']
+    post.content = data['content']
+    
+    db.session.commit()
+    
+    return jsonify({"message": "Post updated successfully", "post": post_schema.dump(post)}), 200
+
+@app.route("/<path:filename>")
+def serve_frontend(filename):
+    return send_from_directory(FRONTEND_FOLDER, filename)
