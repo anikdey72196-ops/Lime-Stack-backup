@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login / Register</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav class="brutalist-nav">
+        <h2>Lime Stack API</h2>
+        <div id="auth-links">
+            <a href="index.html" class="general-btn nav-btn">Home</a>
+        </div>
+        <div id="user-links" class="hidden">
+            <a href="index.html" class="general-btn nav-btn">Home</a>
+            <a href="new_post.html" class="general-btn nav-btn">New Post</a>
+            <a href="#" onclick="logout()" class="general-btn nav-btn">Logout</a>
+        </div>
+    </nav>
+
+    <div class="wrapper">
+        <div class="card-switch">
+            <label class="switch">
+                <input type="checkbox" class="toggle" id="auth-toggle" />
+                <span class="slider"></span>
+                <span class="card-side"></span>
+                <div class="flip-card__inner">
+                    <!-- LOGIN FRONT -->
+                    <div class="flip-card__front">
+                        <div class="title">Log in</div>
+                        <form class="flip-card__form" id="login-form">
+                            <input class="flip-card__input" id="login-email" name="email" placeholder="Email" type="email" required />
+                            <input class="flip-card__input" id="login-password" name="password" placeholder="Password" type="password" required />
+                            <button class="flip-card__btn" type="submit">Let's go!</button>
+                        </form>
+                    </div>
+                    <!-- REGISTER BACK -->
+                    <div class="flip-card__back">
+                        <div class="title">Sign up</div>
+                        <form class="flip-card__form" id="register-form">
+                            <input class="flip-card__input" id="reg-name" placeholder="Name" type="text" required />
+                            <input class="flip-card__input" id="reg-email" name="email" placeholder="Email" type="email" required />
+                            <input class="flip-card__input" id="reg-password" name="password" placeholder="Password" type="password" required />
+                            <button class="flip-card__btn" type="submit">Confirm!</button>
+                        </form>
+                    </div>
+                </div>
+            </label>
+        </div>   
+    </div>
+
+    <script src="api.js"></script>
+    <script>
+        // Redirect if already logged in
+        if(api.isLoggedIn()) {
+            window.location.href = 'index.html';
+        }
+
+        document.getElementById('login-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+            
+            try {
+                await api.login(email, password);
+                alert("Logged in successfully!");
+                window.location.href = 'index.html';
+            } catch (err) {
+                alert("Login failed: " + err.message);
+            }
+        });
+
+        document.getElementById('register-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const username = document.getElementById('reg-name').value;
+            const email = document.getElementById('reg-email').value;
+            const password = document.getElementById('reg-password').value;
+            
+            try {
+                await api.register(username, email, password);
+                alert("Registration successful! You can now log in.");
+                // Flip card back to login
+                document.getElementById('auth-toggle').checked = false;
+            } catch (err) {
+                alert("Registration failed: " + err.message);
+            }
+        });
+    </script>
+</body>
+</html>

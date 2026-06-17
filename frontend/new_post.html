@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New Post - My API App</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav class="brutalist-nav">
+        <h2>Lime Stack API</h2>
+        <div id="auth-links">
+            <a href="auth.html" class="general-btn nav-btn">Login / Register</a>
+        </div>
+        <div id="user-links" class="hidden">
+            <a href="index.html" class="general-btn nav-btn">Home</a>
+            <a href="new_post.html" class="general-btn nav-btn">New Post</a>
+            <a href="#" onclick="logout()" class="general-btn nav-btn">Logout</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h1 class="page-title">Create a New Post</h1>
+        <div class="post-card flip-card__front" style="position: relative; width: 100%; height: auto; align-items: flex-start; text-align: left; padding: 30px;">
+            <form id="new-post-form" style="width: 100%; display: flex; flex-direction: column;">
+                <label style="font-weight: 900; margin-bottom: 10px; color: var(--main-color);">Title</label>
+                <input type="text" id="post-title" class="general-input" placeholder="Give your post a catchy title..." required>
+                
+                <label style="font-weight: 900; margin-bottom: 10px; color: var(--main-color);">Content</label>
+                <textarea id="post-content" class="general-input" placeholder="Write something amazing..." required></textarea>
+                
+                <button type="submit" class="general-btn" style="width: 150px; background-color: var(--input-focus); color: white;">Submit Post</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="api.js"></script>
+    <script>
+        // If not logged in, redirect to login
+        if(!api.isLoggedIn()) {
+            alert("You must be logged in to create a post.");
+            window.location.href = 'auth.html';
+        }
+
+        document.getElementById('new-post-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const title = document.getElementById('post-title').value;
+            const content = document.getElementById('post-content').value;
+            
+            try {
+                await api.createPost(title, content);
+                alert("Post created successfully!");
+                window.location.href = 'index.html';
+            } catch (err) {
+                alert("Could not create post: " + err.message);
+            }
+        });
+    </script>
+</body>
+</html>
