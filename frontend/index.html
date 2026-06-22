@@ -14,7 +14,7 @@
 <!-- Tailwind -->
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <!-- Marked (Markdown Parser) -->
-<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/marked/lib/marked.umd.js"></script>
 <script id="tailwind-config">
       tailwind.config = {
         darkMode: "class",
@@ -95,13 +95,13 @@
         ::-webkit-scrollbar-thumb:hover { background: #4a7c59; }
         
         /* Markdown rendering styles */
-        .markdown-content strong { font-weight: bold; }
-        .markdown-content em { font-style: italic; }
-        .markdown-content h3 { font-size: 1.15rem; font-weight: bold; margin-top: 0.5rem; margin-bottom: 0.25rem; }
-        .markdown-content ul { list-style-type: disc; padding-left: 1.25rem; margin-bottom: 0.5rem; }
-        .markdown-content ol { list-style-type: decimal; padding-left: 1.25rem; margin-bottom: 0.5rem; }
-        .markdown-content blockquote { border-left: 3px solid #4a7c59; padding-left: 0.75rem; font-style: italic; opacity: 0.8; margin-bottom: 0.5rem; }
-        .markdown-content a { color: #4a7c59; text-decoration: underline; }
+        .markdown-content strong { font-weight: bold !important; }
+        .markdown-content em { font-style: italic !important; }
+        .markdown-content h3 { font-size: 1.15rem !important; font-weight: bold !important; margin-top: 0.5rem !important; margin-bottom: 0.25rem !important; }
+        .markdown-content ul { list-style-type: disc !important; padding-left: 1.25rem !important; margin-bottom: 0.5rem !important; }
+        .markdown-content ol { list-style-type: decimal !important; padding-left: 1.25rem !important; margin-bottom: 0.5rem !important; }
+        .markdown-content blockquote { border-left: 3px solid #4a7c59 !important; padding-left: 0.75rem !important; font-style: italic !important; opacity: 0.8 !important; margin-bottom: 0.5rem !important; }
+        .markdown-content a { color: #4a7c59 !important; text-decoration: underline !important; }
     </style>
 </head>
 <body class="bg-surface selection:bg-primary-container selection:text-on-primary-container">
@@ -227,7 +227,7 @@
                         </div>
                         <h2 class="font-headline text-2xl font-bold mb-3 text-on-surface leading-snug">${post.title}</h2>
                         <div class="font-body text-on-surface-variant mb-6 line-clamp-3 leading-relaxed markdown-content">
-                            ${marked.parse(post.content || '')}
+                            ${typeof marked !== 'undefined' ? marked.parse(post.content || '') : (post.content || '')}
                         </div>
                         <div class="flex items-center justify-between">
                             <div class="flex items-center gap-1 bg-surface-container-low rounded-full px-1">
