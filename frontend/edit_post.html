@@ -13,6 +13,8 @@
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <!-- Tailwind CSS -->
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Marked (Markdown Parser) -->
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 <script id="tailwind-config">
         tailwind.config = {
             darkMode: "class",
@@ -94,6 +96,17 @@
         ::-webkit-scrollbar-track { background: #f0ece4; }
         ::-webkit-scrollbar-thumb { background: #c4c8bc; border-radius: 10px; }
         ::-webkit-scrollbar-thumb:hover { background: #4a7c59; }
+        
+        /* Markdown rendering styles */
+        .markdown-content strong { font-weight: bold; }
+        .markdown-content em { font-style: italic; }
+        .markdown-content h1 { font-size: 1.75rem; font-weight: bold; margin-top: 1rem; margin-bottom: 0.5rem; }
+        .markdown-content h2 { font-size: 1.5rem; font-weight: bold; margin-top: 0.75rem; margin-bottom: 0.5rem; }
+        .markdown-content h3 { font-size: 1.25rem; font-weight: bold; margin-top: 0.5rem; margin-bottom: 0.25rem; }
+        .markdown-content ul { list-style-type: disc; padding-left: 1.5rem; margin-bottom: 1rem; }
+        .markdown-content ol { list-style-type: decimal; padding-left: 1.5rem; margin-bottom: 1rem; }
+        .markdown-content blockquote { border-left: 4px solid #4a7c59; padding-left: 1rem; font-style: italic; opacity: 0.8; margin-bottom: 1rem; }
+        .markdown-content a { color: #4a7c59; text-decoration: underline; }
     </style>
 </head>
 <body class="bg-background text-on-surface antialiased overflow-x-hidden">
@@ -187,8 +200,14 @@
 <div class="w-px h-6 bg-outline-variant/30 mx-1"></div>
 <button type="button" onclick="applyMarkdown('[', '](url)', 'link text')" class="p-1.5 hover:bg-surface-variant rounded transition-colors" title="Link"><span class="material-symbols-outlined text-on-surface-variant">link</span></button>
 <button type="button" onclick="applyMarkdown('![', '](image-url)', 'image alt')" class="p-1.5 hover:bg-surface-variant rounded transition-colors" title="Image"><span class="material-symbols-outlined text-on-surface-variant">image</span></button>
+<div class="flex-grow"></div>
+<button type="button" id="preview-btn" class="flex items-center gap-1.5 px-3 py-1 rounded-lg text-sm font-bold text-on-surface-variant hover:bg-surface-variant transition-colors">
+    <span class="material-symbols-outlined text-sm" id="preview-icon">visibility</span>
+    <span id="preview-text">Preview</span>
+</button>
 </div>
 <textarea class="w-full bg-surface-container rounded-b-lg border-none p-4 text-on-surface font-body text-base leading-relaxed focus:ring-2 focus:ring-primary/20 outline-none transition-shadow" id="post-content" rows="12"></textarea>
+<div id="preview-area" class="hidden w-full min-h-[300px] bg-surface-container rounded-b-lg border-none p-4 text-on-surface font-body text-base leading-relaxed focus:ring-2 focus:ring-primary/20 outline-none transition-shadow markdown-content" style="white-space: pre-wrap;"></div>
 <div class="flex justify-between items-center mt-2 px-1">
 <span class="text-xs text-on-surface-variant/60">342 characters</span>
 <span class="text-xs text-on-surface-variant/60">Autosaved at 14:02</span>
@@ -311,6 +330,29 @@
         // Close on backdrop click
         deleteModal.addEventListener('click', (e) => {
             if (e.target === deleteModal) closeModal();
+        });
+
+        const previewBtn = document.getElementById('preview-btn');
+        const previewText = document.getElementById('preview-text');
+        const previewIcon = document.getElementById('preview-icon');
+        const editor = document.getElementById('post-content');
+        const previewArea = document.getElementById('preview-area');
+
+        previewBtn.addEventListener('click', () => {
+            const isPreviewing = !previewArea.classList.contains('hidden');
+            if (isPreviewing) {
+                previewArea.classList.add('hidden');
+                editor.classList.remove('hidden');
+                previewText.textContent = 'Preview';
+                previewIcon.textContent = 'visibility';
+            } else {
+                const content = editor.value || '*No content to preview*';
+                previewArea.innerHTML = marked.parse(content);
+                editor.classList.add('hidden');
+                previewArea.classList.remove('hidden');
+                previewText.textContent = 'Edit';
+                previewIcon.textContent = 'edit';
+            }
         });
 
         function applyMarkdown(prefix, suffix, defaultText) {

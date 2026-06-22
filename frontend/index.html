@@ -13,6 +13,8 @@
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <!-- Tailwind -->
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Marked (Markdown Parser) -->
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 <script id="tailwind-config">
       tailwind.config = {
         darkMode: "class",
@@ -91,6 +93,15 @@
         ::-webkit-scrollbar-track { background: #faf6f0; }
         ::-webkit-scrollbar-thumb { background: #c4c8bc; border-radius: 10px; }
         ::-webkit-scrollbar-thumb:hover { background: #4a7c59; }
+        
+        /* Markdown rendering styles */
+        .markdown-content strong { font-weight: bold; }
+        .markdown-content em { font-style: italic; }
+        .markdown-content h3 { font-size: 1.15rem; font-weight: bold; margin-top: 0.5rem; margin-bottom: 0.25rem; }
+        .markdown-content ul { list-style-type: disc; padding-left: 1.25rem; margin-bottom: 0.5rem; }
+        .markdown-content ol { list-style-type: decimal; padding-left: 1.25rem; margin-bottom: 0.5rem; }
+        .markdown-content blockquote { border-left: 3px solid #4a7c59; padding-left: 0.75rem; font-style: italic; opacity: 0.8; margin-bottom: 0.5rem; }
+        .markdown-content a { color: #4a7c59; text-decoration: underline; }
     </style>
 </head>
 <body class="bg-surface selection:bg-primary-container selection:text-on-primary-container">
@@ -215,9 +226,9 @@
                             </div>
                         </div>
                         <h2 class="font-headline text-2xl font-bold mb-3 text-on-surface leading-snug">${post.title}</h2>
-                        <p class="font-body text-on-surface-variant mb-6 line-clamp-3 leading-relaxed">
-                            ${post.content}
-                        </p>
+                        <div class="font-body text-on-surface-variant mb-6 line-clamp-3 leading-relaxed markdown-content">
+                            ${marked.parse(post.content || '')}
+                        </div>
                         <div class="flex items-center justify-between">
                             <div class="flex items-center gap-1 bg-surface-container-low rounded-full px-1">
                                 <button class="p-2 hover:bg-primary-container/20 rounded-full text-on-surface-variant hover:text-primary transition-all">
