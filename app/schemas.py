@@ -6,7 +6,8 @@ class UserSchema(Schema):
     email = fields.Email(required=True)
     image_file = fields.Str(dump_only=True)
     # Load_only=True means it is only parsed during deserialization (input) and not returned in output
-    password = fields.Str(required=True, load_only=True, validate=validate.Length(min=8, max=19))
+    password = fields.Str(required=True, load_only=True, validate=validate.Length(min=8, max=128))
+    Bio = fields.Str(validate=validate.Length(max=100))
 
 class LoginSchema(Schema):
     email = fields.Email(required=True)

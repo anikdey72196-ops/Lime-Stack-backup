@@ -6,6 +6,8 @@ from marshmallow import ValidationError
 from app import app, bcrypt, db
 from app.models import Post, User
 from app.schemas import UserSchema, LoginSchema, PostSchema
+import secrets
+from werkzeug.utils import secure_filename
 
 user_schema = UserSchema()
 login_schema = LoginSchema()
@@ -48,14 +50,66 @@ def SignIn():
     user = User.query.filter_by(email=data['email']).first()
     if user and bcrypt.check_password_hash(user.password, data['password']):
         access_token = create_access_token(identity=str(user.id))
-        return jsonify({"access_token": access_token}), 200
+        return jsonify({"access_token": access_token, "user_id": user.id}), 200
 
     return jsonify({"message": "Invalid email or password"}), 401
+
+
+
+def save_picture(form_picture):
+    random_hex = secrets.token_hex(8)
+    _, f_ext = os.path.splitext(form_picture.filename)
+    picture_fn = random_hex + f_ext
+    picture_path = os.path.join(app.root_path, 'static', 'profile_pics', picture_fn)
+    form_picture.save(picture_path)
+    return picture_fn
+
+@app.route("/user/me", methods=['GET', 'PUT'])
+@jwt_required()
+def get_user_profile():
+    user_id = get_jwt_identity()
+    user = User.query.get(int(user_id))
+    if not user:
+        return jsonify({"message": "User not found"}), 404
+        
+    if request.method == 'PUT':
+        data = request.get_json() or {}
+        if 'Bio' in data:
+            user.Bio = data['Bio']
+            db.session.commit()
+            
+    return jsonify({"id": user.id, "username": user.username, "email": user.email, "Bio": user.Bio, "image_file": user.image_file}), 200
+
+@app.route("/user/profile_picture", methods=['POST'])
+@jwt_required()
+def upload_profile_picture():
+    user_id = get_jwt_identity()
+    user = User.query.get(int(user_id))
+    if not user:
+        return jsonify({"message": "User not found"}), 404
+
+    if 'profile_picture' not in request.files:
+        return jsonify({"message": "No picture uploaded"}), 400
+
+    pic = request.files['profile_picture']
+    if pic.filename == '':
+        return jsonify({"message": "No picture selected"}), 400
+
+    if pic:
+        picture_file = save_picture(pic)
+        user.image_file = picture_file
+        db.session.commit()
+        return jsonify({"message": "Profile picture updated", "image_file": picture_file}), 200
 
 @app.route("/archive", methods=['GET'])
 def archive():
     posts = Post.query.all()
     return jsonify({"posts": posts_schema.dump(posts)}), 200
+
+@app.route("/post/<int:post_id>", methods=['GET'])
+def get_post(post_id):
+    post = Post.query.get_or_404(post_id)
+    return jsonify({"post": post_schema.dump(post)}), 200
 
 @app.route("/post/new", methods=['POST'])
 @jwt_required()
@@ -85,8 +139,7 @@ def delete_post(post_id):
     
     # Optional: check if the user is the author of the post
     if str(post.user_id) != str(current_user_id):
-        return jsonify({"message": "You are not authorized to delete this post"
-        "Only author can delete the post"}), 403
+        return jsonify({"message": "You are not authorized to delete this post. Only the author can delete the post"}), 403
 
     db.session.delete(post)
     db.session.commit()

@@ -23,6 +23,7 @@ class User(db.Model):
                            nullable=False,
                            default='default.jpg')
     password = db.Column(db.String(60), nullable=False)
+    Bio = db.Column(db.String(100), nullable=True)
     posts = db.relationship('Post', backref='author', lazy=True)
 
     # first entry in the class you want to build the relatiobship with

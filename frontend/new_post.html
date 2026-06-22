@@ -1,60 +1,333 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>New Post - My API App</title>
-    <link rel="stylesheet" href="style.css">
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Lime - New Post</title>
+<!-- Google Fonts: Literata (Headlines) & Nunito Sans (Body) -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Literata:ital,opsz,wght@0,7..72,200..900;1,7..72,200..900&amp;family=Nunito+Sans:ital,opsz,wght@0,200..1000;1,200..1000&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface": "#faf6f0",
+                    "secondary": "#6b6358",
+                    "on-tertiary-fixed-variant": "#554020",
+                    "on-primary-fixed-variant": "#2a6038",
+                    "primary-container": "#78a886",
+                    "tertiary-fixed": "#f8e0a8",
+                    "on-background": "#2e3230",
+                    "on-secondary": "#ffffff",
+                    "surface-dim": "#dbd7cf",
+                    "on-primary-container": "#d8f0de",
+                    "tertiary-container": "#c4a66a",
+                    "surface-container": "#f0ece4",
+                    "outline-variant": "#c4c8bc",
+                    "surface-bright": "#faf6f0",
+                    "secondary-fixed": "#f0e8db",
+                    "on-error": "#ffffff",
+                    "inverse-surface": "#2e3230",
+                    "on-surface-variant": "#4a4e4a",
+                    "surface-tint": "#4a7c59",
+                    "secondary-fixed-dim": "#d4ccbf",
+                    "surface-container-highest": "#e4e0d8",
+                    "on-surface": "#2e3230",
+                    "inverse-on-surface": "#f5f0e8",
+                    "surface-variant": "#e4e0d8",
+                    "on-error-container": "#690005",
+                    "tertiary": "#705c30",
+                    "error": "#b83230",
+                    "on-tertiary-fixed": "#221a05",
+                    "background": "#faf6f0",
+                    "on-secondary-container": "#5e5548",
+                    "primary-fixed-dim": "#8ecf9e",
+                    "surface-container-low": "#f5f1ea",
+                    "on-primary-fixed": "#002110",
+                    "primary": "#4a7c59",
+                    "on-primary": "#ffffff",
+                    "on-tertiary-container": "#554020",
+                    "inverse-primary": "#8ecf9e",
+                    "surface-container-lowest": "#ffffff",
+                    "outline": "#74796e",
+                    "on-secondary-fixed": "#1e1a13",
+                    "on-tertiary": "#ffffff",
+                    "on-secondary-fixed-variant": "#4a4538",
+                    "surface-container-high": "#eae6de",
+                    "secondary-container": "#f0e8db",
+                    "primary-fixed": "#c8e8d0",
+                    "error-container": "#ffdad8",
+                    "tertiary-fixed-dim": "#dcc48e"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.5rem",
+                    "lg": "1rem",
+                    "xl": "1.5rem",
+                    "full": "9999px"
+            },
+            "fontFamily": {
+                    "headline": ["Literata", "serif"],
+                    "display": ["Literata", "serif"],
+                    "body": ["Nunito Sans", "sans-serif"],
+                    "label": ["Nunito Sans", "sans-serif"]
+            },
+          }
+        },
+      }
+    </script>
+<style>
+        body { font-family: 'Nunito Sans', sans-serif; background-color: #faf6f0; color: #2e3230; line-height: 1.6; }
+        h1, h2, h3 { font-family: 'Literata', serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            vertical-align: middle;
+        }
+        .distraction-free-container {
+            max-width: 740px;
+            margin: 0 auto;
+        }
+        .textarea-ghost:focus {
+            outline: none;
+            box-shadow: none;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #e4e0d8;
+            border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #c4c8bc;
+        }
+    </style>
 </head>
-<body>
-    <nav class="brutalist-nav">
-        <h2>Lime Stack API</h2>
-        <div id="auth-links">
-            <a href="auth.html" class="general-btn nav-btn">Login / Register</a>
-        </div>
-        <div id="user-links" class="hidden">
-            <a href="index.html" class="general-btn nav-btn">Home</a>
-            <a href="new_post.html" class="general-btn nav-btn">New Post</a>
-            <a href="#" onclick="logout()" class="general-btn nav-btn">Logout</a>
-        </div>
-    </nav>
+<body class="bg-surface text-on-surface selection:bg-primary-container selection:text-on-primary-container">
+<!-- TopAppBar (Shared Component) -->
+<nav class="flex justify-between items-center px-6 py-3 w-full sticky top-0 z-50 bg-surface dark:bg-surface-dim shadow-sm">
+<div class="flex items-center gap-8">
+<div class="font-headline text-2xl font-bold text-primary dark:text-primary-fixed-dim">
+                Lime
+            </div>
+<!-- In the editor, we suppress heavy navigation, but keep simple crumbs or back action -->
+<div class="hidden md:flex items-center gap-4">
+<button class="text-on-surface-variant font-medium hover:bg-surface-variant/50 transition-colors duration-200 px-3 py-1 rounded-lg flex items-center gap-2 group">
+<span class="material-symbols-outlined text-lg">arrow_back</span>
+<span>Back to Feed</span>
+</button>
+</div>
+</div>
+<div class="flex items-center gap-4">
 
-    <div class="container">
-        <h1 class="page-title">Create a New Post</h1>
-        <div class="post-card flip-card__front" style="position: relative; width: 100%; height: auto; align-items: flex-start; text-align: left; padding: 30px;">
-            <form id="new-post-form" style="width: 100%; display: flex; flex-direction: column;">
-                <label style="font-weight: 900; margin-bottom: 10px; color: var(--main-color);">Title</label>
-                <input type="text" id="post-title" class="general-input" placeholder="Give your post a catchy title..." required>
-                
-                <label style="font-weight: 900; margin-bottom: 10px; color: var(--main-color);">Content</label>
-                <textarea id="post-content" class="general-input" placeholder="Write something amazing..." required></textarea>
-                
-                <button type="submit" class="general-btn" style="width: 150px; background-color: var(--input-focus); color: white;">Submit Post</button>
-            </form>
-        </div>
-    </div>
+<div class="h-8 w-8 rounded-full overflow-hidden bg-surface-container-highest border border-outline-variant/30">
+<img class="w-full h-full object-cover" data-alt="A warm, professional portrait of a person with soft natural lighting, reflecting a calm and grounded personality. The background is a blurred garden with earthy tones and forest green foliage. The overall aesthetic is organic, friendly, and matches the Terra brand's rooted warmth." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCA7agN0EM6iBDTIUrTs1sUhd0vAW_iuzTKcimEDt_vHapKd6mfAfxlS7Iu5KQedBdM8qr_EERGcG_AxKAIoa89s3QqYVZz91CnSV6SsT-Se2JrzAP3y2wnYuP4jnqmaDB_3CoDCQTWqAENQjlTrn0qOLhMlUa5buLNKZtkVG8a7xz-ibU-4WOzUkF0IH2-pey-jpVKG9L1pFcjoWpv0HycBoNEE-YGCk5htbHJS82fSyg9_SCCbJSfD6R_zTYKs3vI9kdHw-wqe3o"/>
+</div>
+</div>
+</nav>
+<main class="min-h-screen pt-8 pb-24 px-6">
+<div class="distraction-free-container">
+<!-- Header Section -->
+<header class="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-6">
+<div>
+<h1 class="text-4xl font-bold text-on-surface mb-2">Create Post</h1>
+<p class="text-on-surface-variant text-lg">Share your thoughts with the Lime community.</p>
+</div>
+<!-- Community Selection -->
+<div class="relative group">
+<label class="block text-xs font-bold text-primary uppercase tracking-widest mb-1.5 ml-1">Posting to</label>
+<button class="flex items-center gap-3 bg-surface-container-low border border-outline-variant/30 hover:border-primary/50 px-4 py-2.5 rounded-xl transition-all duration-300 w-full md:w-56 text-left" id="communitySelect">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">eco</span>
+<span class="flex-1 font-medium text-on-surface">Sustainable Living</span>
+<span class="material-symbols-outlined text-on-surface-variant">expand_more</span>
+</button>
+<!-- Dropdown (Hidden by default) -->
+<div class="hidden absolute top-full left-0 right-0 mt-2 bg-surface-container-lowest border border-outline-variant/20 shadow-xl rounded-xl z-10 overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200">
+<div class="p-2 space-y-1">
+<button class="flex items-center gap-3 w-full p-3 hover:bg-surface-variant/30 rounded-lg text-left transition-colors">
+<span class="material-symbols-outlined text-tertiary">forest</span>
+<div>
+<div class="font-bold text-sm">Forestry &amp; Fauna</div>
+<div class="text-xs text-on-surface-variant">12.4k members</div>
+</div>
+</button>
+<button class="flex items-center gap-3 w-full p-3 bg-primary-container/10 border border-primary/20 rounded-lg text-left transition-colors">
+<span class="material-symbols-outlined text-primary">eco</span>
+<div>
+<div class="font-bold text-sm">Sustainable Living</div>
+<div class="text-xs text-on-surface-variant">45k members</div>
+</div>
+</button>
+<button class="flex items-center gap-3 w-full p-3 hover:bg-surface-variant/30 rounded-lg text-left transition-colors">
+<span class="material-symbols-outlined text-secondary">outdoor_grill</span>
+<div>
+<div class="font-bold text-sm">Organic Cooking</div>
+<div class="text-xs text-on-surface-variant">8.2k members</div>
+</div>
+</button>
+</div>
+</div>
+</div>
+</header>
+<!-- Editor Surface -->
+<div class="bg-surface-container-lowest rounded-xl shadow-sm border border-outline-variant/10 overflow-hidden mb-8 transition-shadow hover:shadow-md duration-500">
+<!-- Toolbar -->
+<div class="flex items-center gap-1 p-2 border-b border-outline-variant/20 bg-surface-container-low/50">
+<button type="button" onclick="applyMarkdown('**', '**', 'bold text')" class="p-2 rounded-lg hover:bg-surface-variant transition-colors" title="Bold"><span class="material-symbols-outlined text-on-surface-variant">format_bold</span></button>
+<button type="button" onclick="applyMarkdown('*', '*', 'italic text')" class="p-2 rounded-lg hover:bg-surface-variant transition-colors" title="Italic"><span class="material-symbols-outlined text-on-surface-variant">format_italic</span></button>
+<button type="button" onclick="applyMarkdown('### ', '', 'Heading')" class="p-2 rounded-lg hover:bg-surface-variant transition-colors" title="Font Size/Heading"><span class="material-symbols-outlined text-on-surface-variant">format_size</span></button>
+<button type="button" onclick="applyMarkdown('- ', '', 'list item')" class="p-2 rounded-lg hover:bg-surface-variant transition-colors" title="List"><span class="material-symbols-outlined text-on-surface-variant">format_list_bulleted</span></button>
+<button type="button" onclick="applyMarkdown('> ', '', 'quote')" class="p-2 rounded-lg hover:bg-surface-variant transition-colors" title="Quote"><span class="material-symbols-outlined text-on-surface-variant">format_quote</span></button>
+<div class="w-px h-6 bg-outline-variant/30 mx-1"></div>
+<button type="button" onclick="applyMarkdown('[', '](url)', 'link text')" class="p-2 rounded-lg hover:bg-surface-variant transition-colors" title="Link"><span class="material-symbols-outlined text-on-surface-variant">link</span></button>
+<button type="button" onclick="applyMarkdown('![', '](image-url)', 'image alt')" class="p-2 rounded-lg hover:bg-surface-variant transition-colors" title="Image"><span class="material-symbols-outlined text-on-surface-variant">image</span></button>
+<div class="flex-grow"></div>
+<button type="button" class="flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-bold text-on-surface-variant hover:bg-surface-variant transition-colors">
+<span class="material-symbols-outlined text-sm">visibility</span>
+                        Preview
+                    </button>
+</div>
+<!-- Input Fields -->
+<div class="p-8 space-y-6">
+<input class="w-full text-3xl font-headline font-bold bg-transparent border-none focus:ring-0 placeholder:text-outline-variant/60 text-on-surface" maxlength="100" placeholder="Title of your post..." type="text"/>
+<div class="relative">
+<textarea class="w-full min-h-[400px] text-lg font-body bg-transparent border-none focus:ring-0 placeholder:text-outline-variant/60 text-on-surface resize-none textarea-ghost custom-scrollbar" id="editor" oninput="updateWordCount(this)" placeholder="Write your story here... (Markdown supported)"></textarea>
+</div>
+</div>
+<!-- Bottom Status Bar -->
+<div class="px-8 py-4 bg-surface-container-low/30 border-t border-outline-variant/10 flex justify-between items-center text-sm text-on-surface-variant font-medium">
+<div class="flex items-center gap-4">
+<span id="wordCount">0 words</span>
+<span id="charCount">0 characters</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-base" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span>Saved to drafts</span>
+</div>
+</div>
+</div>
+<!-- Action Area -->
+<div class="flex items-center justify-end gap-4">
+<button class="px-6 py-3 rounded-xl font-bold text-primary hover:bg-primary/5 transition-all active:scale-95">
+                    Save Draft
+                </button>
+<button id="publish-btn" class="px-10 py-3 bg-primary text-on-primary rounded-xl font-bold shadow-lg shadow-primary/20 hover:shadow-xl hover:bg-primary/90 transition-all active:scale-95 flex items-center gap-2">
+                    Publish Post
+                    <span class="material-symbols-outlined">send</span>
+</button>
+</div>
+</div>
+</main>
+<!-- Post Settings Contextual Panel (Subtle side hint) -->
+<aside class="fixed right-8 top-1/2 -translate-y-1/2 hidden xl:flex flex-col gap-4">
+<div class="bg-surface-container-low p-2 rounded-full border border-outline-variant/20 shadow-sm flex flex-col gap-2">
+<button class="p-3 rounded-full hover:bg-surface-variant text-on-surface-variant group relative" title="Post Options">
+<span class="material-symbols-outlined">tune</span>
+<span class="absolute right-full mr-4 top-1/2 -translate-y-1/2 bg-on-surface text-surface text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap">Settings</span>
+</button>
 
-    <script src="api.js"></script>
-    <script>
-        // If not logged in, redirect to login
-        if(!api.isLoggedIn()) {
-            alert("You must be logged in to create a post.");
-            window.location.href = 'auth.html';
+</div>
+</aside>
+<!-- Footer Help -->
+<footer class="fixed bottom-0 left-0 right-0 p-4 flex justify-center pointer-events-none">
+<div class="bg-surface-container-high/80 backdrop-blur-md px-4 py-2 rounded-full border border-outline-variant/20 text-xs text-on-surface-variant/80 font-medium pointer-events-auto flex items-center gap-4">
+<div class="flex items-center gap-1"><kbd class="bg-surface px-1.5 py-0.5 rounded border border-outline-variant/40">Ctrl</kbd> + <kbd class="bg-surface px-1.5 py-0.5 rounded border border-outline-variant/40">B</kbd> Bold</div>
+<div class="w-px h-3 bg-outline-variant/30"></div>
+<div class="flex items-center gap-1"><kbd class="bg-surface px-1.5 py-0.5 rounded border border-outline-variant/40">Ctrl</kbd> + <kbd class="bg-surface px-1.5 py-0.5 rounded border border-outline-variant/40">Enter</kbd> Publish</div>
+</div>
+</footer>
+<script src="api.js"></script>
+<script>
+        function applyMarkdown(prefix, suffix, defaultText) {
+            const editor = document.getElementById('editor');
+            const start = editor.selectionStart;
+            const end = editor.selectionEnd;
+            const text = editor.value;
+            
+            let selectedText = text.substring(start, end);
+            if (!selectedText) selectedText = defaultText;
+            
+            const before = text.substring(0, start);
+            const after = text.substring(end);
+            
+            editor.value = before + prefix + selectedText + suffix + after;
+            
+            // Restore selection
+            editor.focus();
+            editor.selectionStart = start + prefix.length;
+            editor.selectionEnd = start + prefix.length + selectedText.length;
+            
+            // Update counts if necessary
+            if(typeof updateWordCount === 'function') updateWordCount(editor);
         }
 
-        document.getElementById('new-post-form').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const title = document.getElementById('post-title').value;
-            const content = document.getElementById('post-content').value;
-            
+        document.getElementById('publish-btn').addEventListener('click', async () => {
+            const titleInput = document.querySelector('input[type="text"]');
+            const editor = document.getElementById('editor');
+            const title = titleInput.value.trim();
+            const content = editor.value.trim();
+
+            if (!title) {
+                alert('Title is required.');
+                return;
+            }
+
+            if (content.length < 50) {
+                alert('Post content must be at least 50 characters long.');
+                return;
+            }
+
             try {
                 await api.createPost(title, content);
-                alert("Post created successfully!");
                 window.location.href = 'index.html';
-            } catch (err) {
-                alert("Could not create post: " + err.message);
+            } catch (error) {
+                alert(error.message);
             }
         });
+
+        function updateWordCount(textarea) {
+            const text = textarea.value.trim();
+            const words = text ? text.split(/\s+/).length : 0;
+            const chars = text.length;
+            
+            document.getElementById('wordCount').innerText = `${words} word${words === 1 ? '' : 's'}`;
+            document.getElementById('charCount').innerText = `${chars} character${chars === 1 ? '' : 's'}`;
+            
+            // Auto-resize logic
+            textarea.style.height = 'auto';
+            textarea.style.height = (textarea.scrollHeight) + 'px';
+        }
+
+        // Community Select Toggle Logic
+        const commBtn = document.getElementById('communitySelect');
+        const dropdown = commBtn.nextElementSibling;
+        
+        commBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            dropdown.classList.toggle('hidden');
+        });
+
+        document.addEventListener('click', () => {
+            dropdown.classList.add('hidden');
+        });
+
+        // Micro-interactions for the editor
+        const editor = document.getElementById('editor');
+        editor.addEventListener('focus', () => {
+            editor.parentElement.parentElement.classList.add('ring-2', 'ring-primary/10');
+        });
+        editor.addEventListener('blur', () => {
+            editor.parentElement.parentElement.classList.remove('ring-2', 'ring-primary/10');
+        });
     </script>
-</body>
-</html>
+</body></html>

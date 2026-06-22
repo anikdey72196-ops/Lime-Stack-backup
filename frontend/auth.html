@@ -1,89 +1,208 @@
 <!DOCTYPE html>
-<html lang="en">
+<html class="light" lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login / Register</title>
-    <link rel="stylesheet" href="style.css">
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Lime - Rooted in Conversation</title>
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link href="https://fonts.googleapis.com/css2?family=Literata:ital,opsz,wght@0,7..72,200..900;1,7..72,200..900&family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "surface": "#faf6f0",
+                      "primary": "#4a7c59",
+                      "on-primary": "#ffffff",
+                      "primary-container": "#78a886",
+                      "on-primary-container": "#d8f0de",
+                      "surface-container-lowest": "#ffffff",
+                      "on-surface": "#2e3230",
+                      "on-surface-variant": "#4a4e4a",
+                      "outline-variant": "#c4c8bc",
+                      "outline": "#74796e",
+                      "primary-fixed": "#c8e8d0",
+                      "tertiary-fixed": "#f8e0a8"
+              },
+              "fontFamily": {
+                      "headline": ["Literata"],
+                      "body": ["Nunito Sans"],
+                      "label": ["Nunito Sans"]
+              }
+            }
+          }
+        }
+    </script>
+    <style>
+        body { font-family: 'Nunito Sans', sans-serif; }
+        h1, h2, h3 { font-family: 'Literata', serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .soft-shadow { box-shadow: 0 4px 20px rgba(46, 50, 48, 0.06); }
+        .form-transition { transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1); }
+    </style>
 </head>
-<body>
-    <nav class="brutalist-nav">
-        <h2>Lime Stack API</h2>
-        <div id="auth-links">
-            <a href="index.html" class="general-btn nav-btn">Home</a>
-        </div>
-        <div id="user-links" class="hidden">
-            <a href="index.html" class="general-btn nav-btn">Home</a>
-            <a href="new_post.html" class="general-btn nav-btn">New Post</a>
-            <a href="#" onclick="logout()" class="general-btn nav-btn">Logout</a>
-        </div>
-    </nav>
-
-    <div class="wrapper">
-        <div class="card-switch">
-            <label class="switch">
-                <input type="checkbox" class="toggle" id="auth-toggle" />
-                <span class="slider"></span>
-                <span class="card-side"></span>
-                <div class="flip-card__inner">
-                    <!-- LOGIN FRONT -->
-                    <div class="flip-card__front">
-                        <div class="title">Log in</div>
-                        <form class="flip-card__form" id="login-form">
-                            <input class="flip-card__input" id="login-email" name="email" placeholder="Email" type="email" required />
-                            <input class="flip-card__input" id="login-password" name="password" placeholder="Password" type="password" required />
-                            <button class="flip-card__btn" type="submit">Let's go!</button>
-                        </form>
-                    </div>
-                    <!-- REGISTER BACK -->
-                    <div class="flip-card__back">
-                        <div class="title">Sign up</div>
-                        <form class="flip-card__form" id="register-form">
-                            <input class="flip-card__input" id="reg-name" placeholder="Name" type="text" required />
-                            <input class="flip-card__input" id="reg-email" name="email" placeholder="Email" type="email" required />
-                            <input class="flip-card__input" id="reg-password" name="password" placeholder="Password" type="password" required />
-                            <button class="flip-card__btn" type="submit">Confirm!</button>
-                        </form>
-                    </div>
-                </div>
-            </label>
-        </div>   
+<body class="bg-surface text-on-surface min-h-screen flex items-center justify-center p-4 relative overflow-hidden">
+    <!-- Atmospheric Background Decoration -->
+    <div class="absolute inset-0 pointer-events-none opacity-40 overflow-hidden">
+        <div class="absolute -top-24 -left-24 w-96 h-96 rounded-full bg-primary-fixed blur-3xl opacity-30"></div>
+        <div class="absolute -bottom-48 -right-24 w-[32rem] h-[32rem] rounded-full bg-tertiary-fixed blur-[100px] opacity-20"></div>
     </div>
 
+    <!-- Main Container -->
+    <main class="w-full max-w-md z-10">
+        <!-- Branding -->
+        <header class="text-center mb-10">
+            <div class="inline-flex items-center justify-center w-16 h-16 bg-primary rounded-xl mb-4 soft-shadow">
+                <span class="material-symbols-outlined text-on-primary text-4xl" data-icon="park">park</span>
+            </div>
+            <h1 class="text-4xl font-bold tracking-tight text-primary">Lime</h1>
+            <p class="text-on-surface-variant font-body mt-2">Rooted in conversation</p>
+        </header>
+
+        <!-- Auth Card -->
+        <div class="bg-surface-container-lowest rounded-xl p-8 soft-shadow border border-outline-variant/10">
+            <!-- Toggle Navigation -->
+            <div class="flex border-b border-outline-variant/20 mb-8 overflow-hidden">
+                <button class="flex-1 py-3 text-sm font-label font-bold text-primary border-b-2 border-primary transition-all duration-300" id="toggle-login">Login</button>
+                <button class="flex-1 py-3 text-sm font-label font-medium text-on-surface-variant hover:text-primary transition-all duration-300" id="toggle-register">Register</button>
+            </div>
+
+            <!-- Forms Container -->
+            <div class="relative overflow-hidden">
+                <!-- Login Form -->
+                <div class="form-transition opacity-100 transform translate-x-0" id="login-section">
+                    <form id="login-form" class="space-y-6">
+                        <div class="space-y-2">
+                            <label class="block text-sm font-label text-on-surface-variant ml-1" for="login-email">Email address</label>
+                            <input class="w-full px-4 py-3 bg-surface border border-outline-variant/30 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all placeholder:text-outline/60" id="login-email" placeholder="hello@terra.com" type="email" required />
+                        </div>
+                        <div class="space-y-2">
+                            <div class="flex justify-between items-center">
+                                <label class="block text-sm font-label text-on-surface-variant ml-1" for="login-password">Password</label>
+                            </div>
+                            <input class="w-full px-4 py-3 bg-surface border border-outline-variant/30 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all placeholder:text-outline/60" id="login-password" placeholder="••••••••" type="password" required />
+                        </div>
+                        <div id="login-error" class="text-red-500 text-sm hidden"></div>
+                        <button class="w-full bg-primary text-on-primary font-label font-bold py-3.5 rounded-lg active:scale-95 transition-all soft-shadow hover:bg-primary-container hover:text-on-primary-container" type="submit">
+                            Sign In
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Register Form -->
+                <div class="form-transition opacity-0 transform translate-x-full hidden" id="register-section">
+                    <form id="register-form" class="space-y-4">
+                        <div class="space-y-2">
+                            <!-- Backend expects 'username', so we changed First/Last Name to a single Username field -->
+                            <label class="block text-sm font-label text-on-surface-variant ml-1" for="reg-username">Username</label>
+                            <input class="w-full px-4 py-3 bg-surface border border-outline-variant/30 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all placeholder:text-outline/60" id="reg-username" placeholder="JaneOak" type="text" required />
+                        </div>
+                        <div class="space-y-2">
+                            <label class="block text-sm font-label text-on-surface-variant ml-1" for="reg-email">Email address</label>
+                            <input class="w-full px-4 py-3 bg-surface border border-outline-variant/30 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all placeholder:text-outline/60" id="reg-email" placeholder="jane@terra.community" type="email" required />
+                        </div>
+                        <div class="space-y-2">
+                            <label class="block text-sm font-label text-on-surface-variant ml-1" for="reg-password">Password</label>
+                            <input class="w-full px-4 py-3 bg-surface border border-outline-variant/30 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all placeholder:text-outline/60" id="reg-password" placeholder="At least 8 characters" type="password" minlength="8" maxlength="128" required />
+                        </div>
+                        <div id="register-error" class="text-red-500 text-sm hidden"></div>
+                        <p class="text-[10px] text-on-surface-variant leading-relaxed mt-2">
+                            By joining, you agree to our Community Guidelines. We promise to protect your roots.
+                        </p>
+                        <button class="w-full bg-primary text-on-primary font-label font-bold py-3.5 rounded-lg active:scale-95 transition-all soft-shadow hover:bg-primary-container hover:text-on-primary-container" type="submit">
+                            Create Account
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Load the API methods -->
     <script src="api.js"></script>
     <script>
-        // Redirect if already logged in
-        if(api.isLoggedIn()) {
-            window.location.href = 'index.html';
+        const loginBtn = document.getElementById('toggle-login');
+        const registerBtn = document.getElementById('toggle-register');
+        const loginSection = document.getElementById('login-section');
+        const registerSection = document.getElementById('register-section');
+
+        function showLogin() {
+            loginBtn.classList.add('font-bold', 'text-primary', 'border-b-2', 'border-primary');
+            loginBtn.classList.remove('font-medium', 'text-on-surface-variant');
+            registerBtn.classList.remove('font-bold', 'text-primary', 'border-b-2', 'border-primary');
+            registerBtn.classList.add('font-medium', 'text-on-surface-variant');
+
+            registerSection.classList.add('translate-x-full', 'opacity-0');
+            setTimeout(() => {
+                registerSection.classList.add('hidden');
+                loginSection.classList.remove('hidden');
+                setTimeout(() => {
+                    loginSection.classList.remove('-translate-x-full', 'opacity-0');
+                    loginSection.classList.add('translate-x-0', 'opacity-100');
+                }, 20);
+            }, 300);
         }
 
+        function showRegister() {
+            registerBtn.classList.add('font-bold', 'text-primary', 'border-b-2', 'border-primary');
+            registerBtn.classList.remove('font-medium', 'text-on-surface-variant');
+            loginBtn.classList.remove('font-bold', 'text-primary', 'border-b-2', 'border-primary');
+            loginBtn.classList.add('font-medium', 'text-on-surface-variant');
+
+            loginSection.classList.add('-translate-x-full', 'opacity-0');
+            setTimeout(() => {
+                loginSection.classList.add('hidden');
+                registerSection.classList.remove('hidden');
+                setTimeout(() => {
+                    registerSection.classList.remove('translate-x-full', 'opacity-0');
+                    registerSection.classList.add('translate-x-0', 'opacity-100');
+                }, 20);
+            }, 300);
+        }
+
+        loginBtn.addEventListener('click', showLogin);
+        registerBtn.addEventListener('click', showRegister);
+
+        // API INTEGRATION
         document.getElementById('login-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             const email = document.getElementById('login-email').value;
             const password = document.getElementById('login-password').value;
+            const errorDiv = document.getElementById('login-error');
             
             try {
                 await api.login(email, password);
-                alert("Logged in successfully!");
-                window.location.href = 'index.html';
+                window.location.href = 'index.html'; // Redirect to main page on success
             } catch (err) {
-                alert("Login failed: " + err.message);
+                errorDiv.textContent = err.message;
+                errorDiv.classList.remove('hidden');
             }
         });
 
         document.getElementById('register-form').addEventListener('submit', async (e) => {
             e.preventDefault();
-            const username = document.getElementById('reg-name').value;
+            const username = document.getElementById('reg-username').value;
             const email = document.getElementById('reg-email').value;
             const password = document.getElementById('reg-password').value;
+            const errorDiv = document.getElementById('register-error');
             
             try {
                 await api.register(username, email, password);
-                alert("Registration successful! You can now log in.");
-                // Flip card back to login
-                document.getElementById('auth-toggle').checked = false;
+                // Optionally auto-login or just show success and switch to login
+                showLogin();
+                document.getElementById('login-email').value = email;
             } catch (err) {
-                alert("Registration failed: " + err.message);
+                errorDiv.textContent = err.message;
+                errorDiv.classList.remove('hidden');
             }
         });
     </script>

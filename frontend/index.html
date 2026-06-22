@@ -1,63 +1,251 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home - My API App</title>
-    <link rel="stylesheet" href="style.css">
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Lime — Rooted in Conversation</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Literata:ital,opsz,wght@0,7..72,200..900;1,7..72,200..900&amp;family=Nunito+Sans:ital,opsz,wght@0,200..1000;1,200..1000&amp;display=swap" rel="stylesheet"/>
+<!-- Icons -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface": "#faf6f0",
+                    "secondary": "#6b6358",
+                    "on-tertiary-fixed-variant": "#554020",
+                    "on-primary-fixed-variant": "#2a6038",
+                    "primary-container": "#78a886",
+                    "tertiary-fixed": "#f8e0a8",
+                    "on-background": "#2e3230",
+                    "on-secondary": "#ffffff",
+                    "surface-dim": "#dbd7cf",
+                    "on-primary-container": "#d8f0de",
+                    "tertiary-container": "#c4a66a",
+                    "surface-container": "#f0ece4",
+                    "outline-variant": "#c4c8bc",
+                    "surface-bright": "#faf6f0",
+                    "secondary-fixed": "#f0e8db",
+                    "on-error": "#ffffff",
+                    "inverse-surface": "#2e3230",
+                    "on-surface-variant": "#4a4e4a",
+                    "surface-tint": "#4a7c59",
+                    "secondary-fixed-dim": "#d4ccbf",
+                    "surface-container-highest": "#e4e0d8",
+                    "on-surface": "#2e3230",
+                    "inverse-on-surface": "#f5f0e8",
+                    "surface-variant": "#e4e0d8",
+                    "on-error-container": "#690005",
+                    "tertiary": "#705c30",
+                    "error": "#b83230",
+                    "on-tertiary-fixed": "#221a05",
+                    "background": "#faf6f0",
+                    "on-secondary-container": "#5e5548",
+                    "primary-fixed-dim": "#8ecf9e",
+                    "surface-container-low": "#f5f1ea",
+                    "on-primary-fixed": "#002110",
+                    "primary": "#4a7c59",
+                    "on-primary": "#ffffff",
+                    "on-tertiary-container": "#554020",
+                    "inverse-primary": "#8ecf9e",
+                    "surface-container-lowest": "#ffffff",
+                    "outline": "#74796e",
+                    "on-secondary-fixed": "#1e1a13",
+                    "on-tertiary": "#ffffff",
+                    "on-secondary-fixed-variant": "#4a4538",
+                    "surface-container-high": "#eae6de",
+                    "secondary-container": "#f0e8db",
+                    "primary-fixed": "#c8e8d0",
+                    "error-container": "#ffdad8",
+                    "tertiary-fixed-dim": "#dcc48e"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.5rem",
+                    "lg": "1rem",
+                    "xl": "1.5rem",
+                    "full": "9999px"
+            },
+            "fontFamily": {
+                    "headline": ["Literata", "serif"],
+                    "display": ["Literata", "serif"],
+                    "body": ["Nunito Sans", "sans-serif"],
+                    "label": ["Nunito Sans", "sans-serif"]
+            }
+          }
+        }
+      }
+    </script>
+<style>
+        body { font-family: 'Nunito Sans', sans-serif; background-color: #faf6f0; color: #2e3230; line-height: 1.6; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .font-headline { font-family: 'Literata', serif; }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #faf6f0; }
+        ::-webkit-scrollbar-thumb { background: #c4c8bc; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #4a7c59; }
+    </style>
 </head>
-<body>
-    <nav class="brutalist-nav">
-        <h2>Lime Stack API</h2>
-        <div id="auth-links">
-            <a href="auth.html" class="general-btn nav-btn">Login / Register</a>
-        </div>
-        <div id="user-links" class="hidden">
-            <a href="index.html" class="general-btn nav-btn">Home</a>
-            <a href="new_post.html" class="general-btn nav-btn">New Post</a>
-            <a href="#" onclick="logout()" class="general-btn nav-btn">Logout</a>
-        </div>
-    </nav>
+<body class="bg-surface selection:bg-primary-container selection:text-on-primary-container">
+<!-- TopAppBar -->
+<header class="flex justify-between items-center px-6 py-3 w-full sticky top-0 z-50 bg-surface shadow-sm dark:bg-surface-dim">
+<div class="flex items-center gap-8">
+<span class="font-headline text-2xl font-bold text-primary dark:text-primary-fixed-dim">Lime</span>
 
-    <div class="container" id="posts-container">
-        <h1 class="page-title">Community Posts</h1>
-        <div id="posts-list">
-            <p style="font-weight: 600;">Loading posts...</p>
-        </div>
-    </div>
-
-    <script src="api.js"></script>
+</div>
+<nav class="hidden md:flex items-center gap-6">
+<a class="text-primary font-bold border-b-2 border-primary pb-1 font-body" href="#">Home</a>
+</nav>
+<div class="flex items-center gap-4" id="nav-auth-container">
+    <!-- Content injected by JS based on login status -->
+</div>
+</header>
+<div class="flex w-full justify-center min-h-screen">
+<!-- SideNavBar -->
+<aside class="hidden lg:flex flex-col items-end h-[calc(100vh-68px)] p-4 lg:py-6 lg:pr-8 border-r border-outline-variant/30 w-[320px] shrink-0 sticky top-[68px] bg-surface-container dark:bg-surface-container-lowest">
+<div class="w-full flex flex-col h-full">
+<div class="mb-8 px-4">
+<h1 class="font-headline text-xl text-primary">Lime</h1>
+<p class="text-xs text-on-surface-variant opacity-70 font-body">Rooted in conversation</p>
+</div>
+<nav class="flex flex-col gap-1 mb-8">
+<a class="bg-primary-container text-on-primary-container rounded-xl font-bold px-4 py-3 flex items-center gap-3 active:opacity-80 transition-all duration-150" href="#">
+<span class="material-symbols-outlined">home</span>
+<span class="font-body text-base">Home</span>
+</a>
+</nav>
+<button onclick="window.location.href='new_post.html'" class="w-full bg-primary text-white py-4 px-6 rounded-xl font-bold font-body shadow-lg shadow-primary/20 hover:brightness-110 active:scale-95 transition-all">
+                Create Post
+            </button>
+            </button>
+</div>
+</aside>
+<!-- Main Feed Canvas -->
+<main class="flex-1 px-4 py-6 md:px-8 max-w-5xl border-x border-outline-variant/10">
+<!-- Posts Feed -->
+<div id="posts-container" class="space-y-6">
+    <p class="text-on-surface-variant text-center font-bold mt-10">Loading posts...</p>
+</div>
+</main>
+<!-- Right Sidebar (Extra Context) -->
+<aside class="hidden xl:flex flex-col h-[calc(100vh-68px)] py-8 pl-8 border-l border-outline-variant/30 w-[320px] shrink-0 sticky top-[68px] overflow-y-auto">
+<div class="w-full flex flex-col h-full">
+<!-- Footer-like Links -->
+<div class="mt-auto px-2 text-[10px] text-on-surface-variant opacity-60 flex flex-wrap gap-x-4 gap-y-2 pb-8">
+<a class="hover:underline" href="#">Privacy Policy</a>
+<a class="hover:underline" href="#">Content Policy</a>
+<a class="hover:underline" href="#">Moderator Code</a>
+<a class="hover:underline" href="#">Terra © 2024</a>
+</div>
+</div>
+</aside>
+</div>
+<!-- Mobile Bottom Navigation -->
+<nav class="md:hidden fixed bottom-0 left-0 right-0 bg-surface shadow-[0_-4px_20px_rgba(0,0,0,0.05)] px-6 py-3 flex justify-between items-center z-50">
+<button class="flex flex-col items-center gap-1 text-primary">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">home</span>
+<span class="text-[10px] font-bold">Home</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-on-surface-variant">
+<span class="material-symbols-outlined">explore</span>
+<span class="text-[10px]">Explore</span>
+</button>
+<button class="w-12 h-12 bg-primary text-white rounded-full flex items-center justify-center shadow-lg -translate-y-6">
+<span class="material-symbols-outlined">add</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-on-surface-variant">
+<span class="material-symbols-outlined">chat_bubble</span>
+<span class="text-[10px]">Talk</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-on-surface-variant">
+<span class="material-symbols-outlined">person</span>
+<span class="text-[10px]">Profile</span>
+</button>
+</nav>
+<script>
+        // Simple Interaction logic
+        document.querySelectorAll('article').forEach(article => {
+            article.addEventListener('mouseenter', () => {
+                article.classList.add('transition-transform', 'duration-300');
+            });
+        });
+        </script>
+        <script src="api.js"></script>
     <script>
+        // Search Bar Focus Effect
+        const searchInput = document.querySelector('input[type="text"]');
+        if(searchInput) {
+            searchInput.addEventListener('focus', () => {
+                searchInput.parentElement.classList.add('shadow-md');
+            });
+            searchInput.addEventListener('blur', () => {
+                searchInput.parentElement.classList.remove('shadow-md');
+            });
+        }
+
         async function loadPosts() {
-            const postsList = document.getElementById('posts-list');
+            const postsContainer = document.getElementById('posts-container');
             try {
                 const data = await api.fetchPosts();
-                if (data.posts.length === 0) {
-                    postsList.innerHTML = '<p>No posts available.</p>';
+                if (!data.posts || data.posts.length === 0) {
+                    postsContainer.innerHTML = '<p class="text-on-surface-variant text-center mt-10">No posts available.</p>';
                     return;
                 }
 
-                postsList.innerHTML = ''; // clear loading
+                postsContainer.innerHTML = ''; 
                 data.posts.forEach(post => {
-                    const postEl = document.createElement('div');
-                    postEl.className = 'post-card flip-card__front'; // borrow flip-card styling for posts
-                    postEl.style.position = 'relative';
-                    postEl.style.width = '100%';
-                    postEl.style.height = 'auto';
-                    postEl.style.alignItems = 'flex-start';
-                    postEl.style.textAlign = 'left';
-                    postEl.style.padding = '30px';
+                    const isAuthor = api.isLoggedIn() && String(post.user_id) === String(api.getUserId());
                     
-                    postEl.innerHTML = `
-                        <div class="post-title" style="margin: 0 0 15px 0; text-align: left; font-size: 22px;">${post.title}</div>
-                        <div class="post-content" style="color: var(--main-color); font-weight: 500;">${post.content}</div>
-                        <small style="color: var(--font-color-sub); margin-top: 20px; display: block; font-weight: 600;">Posted on: ${post.date_posted || 'Unknown'}</small>
-                        ${api.isLoggedIn() ? `<button onclick="deletePost(${post.id})" class="general-btn" style="background-color: #ff6b6b; color: white; width: auto; padding: 0 15px; margin-bottom: 0; margin-top: 20px;">Delete</button>` : ''}
-                    `;
-                    postsList.appendChild(postEl);
+                    const postHtml = `
+                    <article class="bg-surface-container-lowest rounded-xl p-6 border border-outline-variant/10 shadow-sm hover:shadow-md transition-shadow duration-300">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="w-8 h-8 rounded-full bg-primary-fixed-dim flex items-center justify-center text-primary font-bold text-xs">${post.author ? post.author.substring(0,2).toUpperCase() : 'U'}</div>
+                            <div>
+                                <p class="text-sm font-bold flex items-center gap-2">
+                                    u/${post.author || 'unknown'}
+                                    <span class="text-[10px] text-on-surface-variant font-normal opacity-60">Posted on ${post.date_posted}</span>
+                                </p>
+                            </div>
+                        </div>
+                        <h2 class="font-headline text-2xl font-bold mb-3 text-on-surface leading-snug">${post.title}</h2>
+                        <p class="font-body text-on-surface-variant mb-6 line-clamp-3 leading-relaxed">
+                            ${post.content}
+                        </p>
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-1 bg-surface-container-low rounded-full px-1">
+                                <button class="p-2 hover:bg-primary-container/20 rounded-full text-on-surface-variant hover:text-primary transition-all">
+                                    <span class="material-symbols-outlined">expand_less</span>
+                                </button>
+                                <span class="text-xs font-bold font-body px-1">0</span>
+                                <button class="p-2 hover:bg-error-container/20 rounded-full text-on-surface-variant hover:text-error transition-all">
+                                    <span class="material-symbols-outlined">expand_more</span>
+                                </button>
+                            </div>
+                            <div class="flex items-center gap-4">
+                                ${isAuthor ? `
+                                <button onclick="window.location.href='edit_post.html?id=${post.id}'" class="flex items-center gap-2 text-primary hover:bg-primary/10 px-3 py-1.5 rounded-lg transition-colors text-sm font-bold">
+                                    <span class="material-symbols-outlined text-lg">edit</span>
+                                    Edit
+                                </button>
+                                <button onclick="deletePost(${post.id})" class="flex items-center gap-2 text-error hover:bg-error/10 px-3 py-1.5 rounded-lg transition-colors text-sm font-bold">
+                                    <span class="material-symbols-outlined text-lg">delete</span>
+                                    Delete
+                                </button>
+                                ` : ''}
+                            </div>
+                        </div>
+                    </article>`;
+                    postsContainer.insertAdjacentHTML('beforeend', postHtml);
                 });
             } catch (err) {
-                postsList.innerHTML = `<p style="color: red;">Error loading posts: ${err.message}</p>`;
+                postsContainer.innerHTML = `<p class="text-error text-center mt-10">Error loading posts: ${err.message}</p>`;
             }
         }
 
@@ -65,15 +253,33 @@
             if(!confirm("Are you sure you want to delete this post?")) return;
             try {
                 await api.deletePost(id);
-                alert("Post deleted!");
-                loadPosts(); // refresh list
+                loadPosts();
             } catch (err) {
                 alert("Could not delete post: " + err.message);
             }
         }
 
-        // Initialize
+        function updateNavAuth() {
+            const authContainer = document.getElementById('nav-auth-container');
+            if (api.isLoggedIn()) {
+                authContainer.innerHTML = `
+                    <button onclick="window.location.href='account.html'" class="p-2 rounded-full hover:bg-surface-variant/50 transition-colors duration-200 active:scale-95 transition-transform text-on-surface-variant">
+                    <span class="material-symbols-outlined">person</span>
+                    </button>
+                    <div class="w-10 h-10 rounded-full overflow-hidden border-2 border-primary/20">
+                        <img class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDmUGiUeopbjCyGQv4xhoGYF2matRlfcXvVowKOivAvQqxeZ57ym5uJiQCraLUy64cRqgxL7V4qr3zOYR8YPfzAZQJtaeco133OPitJGGUQFPvyJK3c0YRUJKKw_AT3KtK_RQTvP5-SJq3BHbZRjeJJE5sc7ELfMxF7dgCF2XzFjRZImg3XHwwOKnchzEldbVs8d9iJ0Gy8NffC8CgQMFF1vor9ThQemYWOrd7mdvWYFaA-YP7emrDYWwMBzZizMHzHnYNbaNKbllU"/>
+                    </div>
+                `;
+            } else {
+                authContainer.innerHTML = `
+                    <button onclick="window.location.href='auth.html'" class="bg-primary text-white px-4 py-2 rounded-xl font-bold font-body shadow-sm hover:brightness-110 active:scale-95 transition-all text-sm">
+                        Login / Register
+                    </button>
+                `;
+            }
+        }
+
+        updateNavAuth();
         loadPosts();
     </script>
-</body>
-</html>
+</body></html>
